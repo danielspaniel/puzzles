@@ -58,7 +58,7 @@ describe ConveyorBelt do
         @conveyor = ConveyorBelt.new(north_data, south_data)
       end
 
-      it "position 3 has more east hits than west" do
+      it "position 3 hits west/east== 2/3" do
         @conveyor.west_hits(3).should == 2
         @conveyor.east_hits(3).should == 3
       end
