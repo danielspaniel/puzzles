@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+require_relative 'infix'
+
+reduce = false
+file_name = ARGV.pop
+reduce = ARGV.any? and ARGV[0] == '-r'
+infix_expression = File.read(file_name)
+
+p Infix.new(infix_expression).prefix(reduce)
