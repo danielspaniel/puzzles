@@ -18,21 +18,26 @@ class ConveyorBelt
     end
   end
 
-  def west_hits(position)
-    0.downto(-position).collect { |click| laser_hits?(click, position) }.compact.size
+  def east_hits(position)
+    position.upto(lasers.size-1).collect { |index| laser_hits?(index-position, index) }.compact.size
   end
 
-  def east_hits(position)
-    0.upto(position).collect { |click| laser_hits?(click, position) }.compact.size
+  def west_hits(position)
+    position.downto(0).collect { |index| laser_hits?(index-position, index) }.compact.size
+  end
+
+  def recommended_direction(position)
+    east_hits(position) < west_hits(position) ? "GO EAST" : "GO WEST"
   end
 
   private
 
-  def laser_hits?(click, position)
-    lasers[click + position].hit_for_click(click) or nil
+  def laser_hits?(click, index)
+    lasers[index].hit_for_click(click) or nil
   end
 
   def laser_in_position(value)
     value == '|'
   end
 end
+

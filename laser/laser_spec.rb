@@ -1,6 +1,10 @@
 require 'rspec'
 require_relative 'laser'
 
+RSpec.configure do |config|
+  config.mock_with :rr
+end
+
 RSpec::Matchers.define :have_laser_values do |expected|
   match do |actual|
     [actual.north, actual.south] == expected
@@ -50,18 +54,46 @@ describe ConveyorBelt do
     end
   end
 
-  describe "#calculate hits" do
+  describe "calculating hits" do
 
     describe "for #|#|#|##', '###||###" do
       before :all do
         north_data, south_data = '#|#|#|##', '###||###'
+        @position = 3
         @conveyor = ConveyorBelt.new(north_data, south_data)
       end
 
-      it "position 3 hits west/east== 2/3" do
-        @conveyor.west_hits(3).should == 2
-        @conveyor.east_hits(3).should == 3
+      it "position 3 hits west/east == 2/3" do
+        @conveyor.west_hits(@position).should == 2
+        @conveyor.east_hits(@position).should == 3
       end
     end
+
   end
+
+  describe "#recommended_direction at any position" do
+    before :each do
+      @position = 3
+      @conveyor = ConveyorBelt.new('', '')
+    end
+
+    it "should be WEST when EAST has more hits" do
+      mock(@conveyor).west_hits(@position) { 2 }
+      mock(@conveyor).east_hits(@position) { 3 }
+      @conveyor.recommended_direction(@position).should == "GO WEST"
+    end
+
+    it "should be EAST when WEST has more hits" do
+      mock(@conveyor).west_hits(@position) { 3 }
+      mock(@conveyor).east_hits(@position) { 2 }
+      @conveyor.recommended_direction(@position).should == "GO EAST"
+    end
+
+    it "should be WEST when EAST has same number of hits" do
+      mock(@conveyor).west_hits(@position) { 3 }
+      mock(@conveyor).east_hits(@position) { 3 }
+      @conveyor.recommended_direction(@position).should == "GO WEST"
+    end
+  end
+
 end
