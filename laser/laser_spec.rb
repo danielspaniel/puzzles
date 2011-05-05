@@ -56,16 +56,23 @@ describe ConveyorBelt do
 
   describe "calculating hits" do
 
-    describe "for #|#|#|##', '###||###" do
+    describe "for sample data => #|#|#|##', '###||###" do
       before :all do
-        north_data, south_data = '#|#|#|##', '###||###'
-        @position = 3
+        north_data = '#|#|#|##'
+        south_data = '###||###'
         @conveyor = ConveyorBelt.new(north_data, south_data)
       end
 
       it "position 3 hits west/east == 2/3" do
-        @conveyor.west_hits(@position).should == 2
-        @conveyor.east_hits(@position).should == 3
+        position = 3
+        @conveyor.west_hits(position).should == 2
+        @conveyor.east_hits(position).should == 3
+      end
+
+      it "position 5 hits west/east == 2/3" do
+        position = 5
+        @conveyor.west_hits(position).should == 4
+        @conveyor.east_hits(position).should == 1
       end
     end
 
