@@ -14,11 +14,6 @@ describe ConveyorBelt do
       @conveyor = ConveyorBelt.new(north_data, south_data)
     end
 
-    it "assembles correct number of LaserBanks" do
-      @conveyor.north_lasers.size.should == 3
-      @conveyor.south_lasers.size.should == 3
-    end
-
     it "initializes laser banks correctly" do
       @conveyor.north_lasers.should == [0, 1, 0]
       @conveyor.south_lasers.should == [0, 0, 1]
