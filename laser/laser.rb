@@ -21,8 +21,8 @@ class ConveyorBelt
 
   private
 
-  def hit_count(arr_range, position)
-    arr_range.inject(0) { |sum,index| sum += laser_hits?(index-position, index); sum }
+  def hit_count(range, position)
+    range.inject(0) { |sum,index| sum += laser_hits?(index-position, index); sum }
   end
 
   def laser_hits?(click, index)
