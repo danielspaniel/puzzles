@@ -5,34 +5,6 @@ RSpec.configure do |config|
   config.mock_with :rr
 end
 
-RSpec::Matchers.define :have_laser_values do |expected|
-  match do |actual|
-    [actual.north, actual.south] == expected
-  end
-end
-
-describe LaserBank do
-
-  describe "#hit_for_click" do
-    it "returns a hit when click is even and north has laser" do
-      LaserBank.new(true, false).hit_for_click(0).should == true
-    end
-
-    it "returns NO hit when click is even and north has NO laser" do
-      LaserBank.new(false, false).hit_for_click(0).should == false
-    end
-
-    it "hits when click is odd and south has laser" do
-      LaserBank.new(false, true).hit_for_click(1).should == true
-    end
-
-    it "returns NO hit when click is odd and north has NO laser" do
-      LaserBank.new(false, false).hit_for_click(1).should == false
-    end
-  end
-
-end
-
 describe ConveyorBelt do
 
   describe "making new" do
@@ -43,14 +15,13 @@ describe ConveyorBelt do
     end
 
     it "assembles correct number of LaserBanks" do
-      @conveyor.lasers.size.should == 3
+      @conveyor.north_lasers.size.should == 3
+      @conveyor.south_lasers.size.should == 3
     end
 
     it "initializes laser banks correctly" do
-      @lasers = @conveyor.lasers
-      @lasers[0].should have_laser_values [false, false]
-      @lasers[1].should have_laser_values [true, false]
-      @lasers[2].should have_laser_values [false, true]
+      @conveyor.north_lasers.should == [0, 1, 0]
+      @conveyor.south_lasers.should == [0, 0, 1]
     end
   end
 
@@ -69,7 +40,7 @@ describe ConveyorBelt do
         @conveyor.east_hits(position).should == 3
       end
 
-      it "position 5 hits west/east == 2/3" do
+      it "position 5 hits west/east == 4/1" do
         position = 5
         @conveyor.west_hits(position).should == 4
         @conveyor.east_hits(position).should == 1
