@@ -8,11 +8,11 @@ class ConveyorBelt
   end
 
   def east_hits(position)
-    position.upto(north_lasers.size-1).inject(0) { |sum,index| sum += laser_hits?(index-position, index); sum }
+    hit_count position..(north_lasers.size-1), position
   end
 
   def west_hits(position)
-    position.downto(0).inject(0) { |sum,index| sum += laser_hits?(index-position, index); sum }
+    hit_count 0..position, position
   end
 
   def recommended_direction(position)
@@ -20,6 +20,10 @@ class ConveyorBelt
   end
 
   private
+
+  def hit_count(arr_range, position)
+    arr_range.inject(0) { |sum,index| sum += laser_hits?(index-position, index); sum }
+  end
 
   def laser_hits?(click, index)
     click.even? ? north_lasers[index] : south_lasers[index]
