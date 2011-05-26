@@ -1,3 +1,4 @@
+# It's a conveyor Belt
 class ConveyorBelt
   attr_reader :north_lasers, :south_lasers
 
